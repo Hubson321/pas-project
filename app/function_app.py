@@ -192,13 +192,17 @@ list_func.add(add_cors_headers)
 
 # Process an id from queue with Azure Cognitive Services image recognition
 @app.function_name(name="process")
-@app.queue_trigger(queue_name=PHOTOS_QUEUE_NAME, connection="ENV_PHOTOS_CONNSTR", arg_name="msg")
+@app.queue_trigger(
+    queue_name=PHOTOS_QUEUE_NAME, connection="ENV_PHOTOS_CONNSTR", arg_name="msg"
+)
 def process(msg: func.QueueMessage) -> None:
     idx = msg.get_body().decode("utf-8")
-    logging.info("Processing image from the queue.")
+    logging.info("Python HTTP trigger function processed a request.")
 
     try:
-        table_service_client = TableServiceClient.from_connection_string(PHOTOS_CONNSTRING)
+        table_service_client = TableServiceClient.from_connection_string(
+            PHOTOS_CONNSTRING
+        )
         table_client = table_service_client.get_table_client(PHOTOS_TABLE_NAME)
         credentials = CognitiveServicesCredentials(CV_KEY)
         cv_service_client = ComputerVisionClient(CV_ENDPOINT, credentials)
@@ -206,32 +210,47 @@ def process(msg: func.QueueMessage) -> None:
         logging.error(f"Error: {e}")
         raise e
 
+    logging.info(f"Connected to Azure Table Storage: {PHOTOS_TABLE_NAME}")
+
+    # read the entity from the table
+    entity = None
     try:
         entity = table_client.get_entity(partition_key=idx, row_key=idx)
     except Exception as e:
         logging.error(f"Error: {e}")
         raise e
 
-    if not entity:
+    if entity is None:
         return
 
+    # get sas token
     try:
         sas_token = generate_sas_token(idx + ".png")
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        raise e
+
+    # Label image with Azure Congitive Services
+    try:
+        tags = []
         analysis = cv_service_client.analyze_image(sas_token, [VisualFeatureTypes.tags])
-        tags = [tag.name for tag in analysis.tags if tag.confidence > 0.8]
+        for tag in analysis.tags:
+            if tag.confidence > 0.8:
+                tags.append(tag.name)
     except Exception as e:
         logging.error(f"Error: {e}")
         raise e
 
     entity["State"] = "processed"
     entity["Result"] = "hotdog" in tags
-    entity["Tags"] = tags
 
     try:
         table_client.upsert_entity(entity=entity)
     except Exception as e:
         logging.error(f"Error: {e}")
         raise e
+
+    return None
 
 @app.function_name(name="get_counters")
 @app.route(route="get_counters", auth_level=func.AuthLevel.ANONYMOUS, methods=["GET"])
