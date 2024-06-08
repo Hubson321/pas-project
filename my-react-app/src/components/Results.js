@@ -9,7 +9,7 @@ const Results = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("ENDPOINT/list");
+        const response = await axios.get(ENDPOINT + "/list");
         setResults(response.data.list);
       } catch (error) {
         console.error("Error fetching data:", error);

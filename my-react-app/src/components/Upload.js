@@ -18,7 +18,7 @@ const Upload = () => {
     }
 
     try {
-      await axios.post("ENDPOINT/post", formData);
+      await axios.post(ENDPOINT + "/post", formData);
       alert("Upload successful!");
     } catch (error) {
       console.error("Error uploading files:", error);
