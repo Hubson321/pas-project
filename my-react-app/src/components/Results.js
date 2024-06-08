@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const ENDPOINT = "https://happy-moss-00c230c03.5.azurestaticapps.net/api";
+
 const Results = () => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("<YOUR_GET_ENDPOINT>");
+        const response = await axios.get("ENDPOINT/list");
         setResults(response.data.list);
       } catch (error) {
         console.error("Error fetching data:", error);

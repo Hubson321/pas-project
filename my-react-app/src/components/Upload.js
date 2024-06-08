@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const ENDPOINT = "https://happy-moss-00c230c03.5.azurestaticapps.net/api";
+
 const Upload = () => {
   const [selectedFiles, setSelectedFiles] = useState(null);
 
@@ -16,7 +18,7 @@ const Upload = () => {
     }
 
     try {
-      await axios.post("<YOUR_POST_ENDPOINT>", formData);
+      await axios.post("ENDPOINT/post", formData);
       alert("Upload successful!");
     } catch (error) {
       console.error("Error uploading files:", error);
