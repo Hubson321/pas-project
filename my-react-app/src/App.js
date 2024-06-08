@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; // Updated import
+
 import Upload from "./components/Upload";
 import Results from "./components/Results";
 
@@ -17,7 +18,7 @@ const App = () => {
             </li>
           </ul>
         </nav>
-        <Switch>
+        <Routes> {/* Updated usage */}
           <Route path="/upload">
             <Upload />
           </Route>
@@ -27,7 +28,7 @@ const App = () => {
           <Route path="/">
             <h2>Welcome to Azure Image Analyzer</h2>
           </Route>
-        </Switch>
+        </Routes> {/* Updated usage */}
       </div>
     </Router>
   );

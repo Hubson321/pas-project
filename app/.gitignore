@@ -46,3 +46,11 @@ __pycache__/
 __blobstorage__
 __queuestorage__
 __azurite_db*__.json
+
+# Ignore README.md and package-lock.json in the my-react-app directory
+my-react-app/README.md
+my-react-app/package-lock.json
+
+# Ignore Terraform state files and directories
+/terraform/.terraform.lock.hcl
+/terraform/.terraform/
