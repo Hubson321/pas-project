@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const ENDPOINT = "https://happy-moss-00c230c03.5.azurestaticapps.net/api";
+const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
 const Upload = () => {
   const [selectedFiles, setSelectedFiles] = useState(null);
