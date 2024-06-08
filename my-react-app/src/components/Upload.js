@@ -27,10 +27,12 @@ const Upload = () => {
   };
 
   return (
-    <div>
+    <div className="upload-container">
       <h2>Upload Images</h2>
-      <input type="file" multiple onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+      <form>
+        <input type="file" multiple onChange={handleFileChange} />
+        <button onClick={handleUpload}>Upload</button>
+      </form>
     </div>
   );
 };

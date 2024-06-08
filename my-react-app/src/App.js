@@ -1,26 +1,33 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; // Make sure Link is imported
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; 
 
 import Upload from "./components/Upload";
 import Results from "./components/Results";
+import GetCounter from "./components/GetCounter";
+
+import "./App.css"; // Import your CSS file for styling
 
 const App = () => {
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
+        <nav className="navbar">
+          <ul className="nav-links">
             <li>
               <Link to="/upload">Upload</Link>
             </li>
             <li>
               <Link to="/results">Results</Link>
             </li>
+            <li>
+              <Link to="/get-counter">Get Counter</Link>
+            </li>
           </ul>
         </nav>
         <Routes>
           <Route path="/upload" element={<Upload />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/get-counter" element={<GetCounter />} />
           <Route path="/" element={<h2>Welcome to Azure Image Analyzer</h2>} />
         </Routes>
       </div>

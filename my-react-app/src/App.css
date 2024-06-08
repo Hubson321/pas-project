@@ -1,38 +1,93 @@
-.App {
+.navbar {
+  background-color: #333;
+  overflow: hidden;
+}
+
+.nav-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  float: left;
+}
+
+.nav-links li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.nav-links li a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.list-container {
+  margin: 20px auto;
+  width: 80%;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.result-table th {
+  background-color: #f2f2f2;
+}
+
+.result-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.result-table tr:hover {
+  background-color: #ddd;
+}
+
+.upload-container {
+  margin: 20px auto;
+  width: 50%;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.upload-container input[type="file"] {
+  display: block;
+  margin: 10px auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.upload-container button {
+  padding: 10px 20px;
+  background-color: #4caf50;
   color: white;
+  border: none;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.upload-container button:hover {
+  background-color: #45a049;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.counter-container {
+  margin: 20px auto;
+  width: 50%;
+}
+
+.counter-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.counter-container li {
+  margin-bottom: 10px;
 }

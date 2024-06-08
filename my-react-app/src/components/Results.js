@@ -20,9 +20,9 @@ const Results = () => {
   }, []);
 
   return (
-    <div>
+    <div className="results-container">
       <h2>Image Analysis Results</h2>
-      <table>
+      <table className="result-table">
         <thead>
           <tr>
             <th>ID</th>
