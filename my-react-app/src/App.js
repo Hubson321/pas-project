@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; // Updated import
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; // Make sure Link is imported
 
 import Upload from "./components/Upload";
 import Results from "./components/Results";
@@ -18,17 +18,11 @@ const App = () => {
             </li>
           </ul>
         </nav>
-        <Routes> {/* Updated usage */}
-          <Route path="/upload">
-            <Upload />
-          </Route>
-          <Route path="/results">
-            <Results />
-          </Route>
-          <Route path="/">
-            <h2>Welcome to Azure Image Analyzer</h2>
-          </Route>
-        </Routes> {/* Updated usage */}
+        <Routes>
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="/" element={<h2>Welcome to Azure Image Analyzer</h2>} />
+        </Routes>
       </div>
     </Router>
   );
