@@ -3,6 +3,6 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 
   tags = {
-    contact = "Jakub Wozniak"
+    contact = "Hubert Mamys"
   }
 }
