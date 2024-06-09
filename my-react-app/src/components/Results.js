@@ -7,6 +7,7 @@ const Results = () => {
   const [results, setResults] = useState([]);
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Define itemsPerPage state
 
   useEffect(() => {
@@ -42,6 +43,10 @@ const Results = () => {
   };
 
   // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -62,14 +67,34 @@ const Results = () => {
 
       {/* Result table */}
       <table className="result-table">
-        {/* Table header */}
-        {/* Table body */}
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>Tags</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((result) => (
+            <tr key={result.RowKey}>
+              <td>{result.RowKey}</td>
+              <td>
+                <a href={result.Url} target="_blank" rel="noopener noreferrer">
+                  View Image
+                </a>
+              </td>
+              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
+              <td>{result.State}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
 
       {/* Pagination */}
-      <ul className="pagination">
+      <ul className="pagination" style={{ display: 'flex', listStyleType: 'none', padding: 0 }}>
         {pageNumbers.map(number => (
-          <li key={number}>
+          <li key={number} style={{ margin: '0 5px', cursor: 'pointer' }} onClick={() => setCurrentPage(number)}>
             {number}
           </li>
         ))}

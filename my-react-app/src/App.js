@@ -5,7 +5,7 @@ import Upload from "./components/Upload";
 import Results from "./components/Results";
 import GetCounter from "./components/GetCounter";
 
-import "./App.css"; // Import your CSS file for styling
+import "./App.css";
 
 const App = () => {
   return (

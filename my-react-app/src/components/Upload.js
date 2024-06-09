@@ -21,7 +21,7 @@ const Upload = ({ history }) => {
     try {
       await axios.post(ENDPOINT + "/post", formData);
       alert("Upload successful!");
-      history.push("/results"); // Navigate to the "Results" tab after successful upload
+      history.push("/results");
     } catch (error) {
       console.error("Error uploading files:", error);
       alert("Upload failed!");
