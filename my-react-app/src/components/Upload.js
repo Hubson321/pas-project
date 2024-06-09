@@ -4,7 +4,7 @@ import axios from "axios";
 const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
 const Upload = ({ history }) => {
-  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleFileChange = (event) => {
     setSelectedFiles(event.target.files);
@@ -12,7 +12,7 @@ const Upload = ({ history }) => {
 
   const handleUpload = async (event) => {
     event.preventDefault(); 
-    if (!selectedFiles) return;
+    if (!selectedFiles || selectedFiles.length === 0) return;
     const formData = new FormData();
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("images", selectedFiles[i]);

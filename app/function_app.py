@@ -222,9 +222,11 @@ def process(msg: func.QueueMessage) -> None:
     try:
         tags = []
         analysis = cv_service_client.analyze_image(sas_token, [VisualFeatureTypes.tags])
+        logging.error("[TAGS] Analysis fine")
         for tag in analysis.tags:
             if tag.confidence > 0.8:
                 tags.append(tag.name)
+                logging.error("[TAGS] Tag = " + tag.name)
     except Exception as e:
         logging.error(f"Error while analzying picture tags: {e}")
         raise e
@@ -252,19 +254,21 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
         logging.error(f"Error: {e}")
         return func.HttpResponse("Error: Unable to connect to Azure Storage", status_code=500)
 
-    counters = {}
-
     try:
+        counters = {}
         entities = table_client.list_entities()
+
         for entity in entities:
-            logging.error("[COUNTERS] Entity tags=" + entity.get("Tags"))
-            entity = dict(entity)
-            for tag in entity.get("Tags", []):
+            tags_string = entity.get("Tags", [])
+            tags_list = tags_string.split(";") if tags_string else []  # Split the Tags string into a list of tags
+
+            for tag in tags_list:
                 logging.error("[COUNTERS] Tag=" + tag)
                 if tag in counters:
                     counters[tag] += 1
                 else:
                     counters[tag] = 1
+
         logging.info(f"Counters: {counters}")
     except Exception as e:
         logging.error(f"Error: {e}")
