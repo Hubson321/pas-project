@@ -21,10 +21,8 @@ const Results = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
-
   // Define handleSearch function
   const handleSearch = () => {
     // If searchTag is empty or contains only spaces, set filteredResults to all results
@@ -32,7 +30,6 @@ const Results = () => {
       setFilteredResults(results);
       return;
     }
-
     // Filter results based on the search tag
     const filtered = results.filter((result) => {
       if (!result.Tags) return false; // If Tags is not defined, exclude the result
@@ -64,37 +61,15 @@ const Results = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-
       {/* Result table */}
       <table className="result-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>URL</th>
-            <th>Tags</th>
-            <th>State</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((result) => (
-            <tr key={result.RowKey}>
-              <td>{result.RowKey}</td>
-              <td>
-                <a href={result.Url} target="_blank" rel="noopener noreferrer">
-                  View Image
-                </a>
-              </td>
-              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
-              <td>{result.State}</td>
-            </tr>
-          ))}
-        </tbody>
+        {/* Table header */}
+        {/* Table body */}
       </table>
-
       {/* Pagination */}
-      <ul className="pagination" style={{ display: 'flex', listStyleType: 'none', padding: 0 }}>
+      <ul className="pagination">
         {pageNumbers.map(number => (
-          <li key={number} style={{ margin: '0 5px', cursor: 'pointer' }} onClick={() => setCurrentPage(number)}>
+          <li key={number} onClick={() => setCurrentPage(number)}>
             {number}
           </li>
         ))}
@@ -102,5 +77,4 @@ const Results = () => {
     </div>
   );
 };
-
 export default Results;

@@ -4,7 +4,7 @@ import axios from "axios";
 const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
 const GetCounter = () => {
-  const [counters, setCounters] = useState({});
+  const [counters, setCounters] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,9 +23,9 @@ const GetCounter = () => {
     <div className="counter-container">
       <h2>Tag Counters</h2>
       <ul>
-        {Object.keys(counters).map((tag) => (
+        {counters.map(([tag, count]) => (
           <li key={tag}>
-            {tag}: {counters[tag]}
+            {tag} {count}
           </li>
         ))}
       </ul>

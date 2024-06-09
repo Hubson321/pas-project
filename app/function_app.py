@@ -104,7 +104,6 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
             container=PHOTOS_CONTAINER_NAME, blob=image_name
         )
         blob_client.upload_blob(body, overwrite=True)
-
     except Exception as e:
         logging.error(f"Error: {e}")
         return func.HttpResponse(
@@ -261,7 +260,7 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
 
         for entity in entities:
             tags_string = entity.get("Tags", "")
-            tags_list = tags_string.split(";") if tags_string else []
+            tags_list = tags_string.split(";") if tags_string else []  # Split the Tags string into a list of tags
 
             for tag in tags_list:
                 if tag in counters:
@@ -271,11 +270,16 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
 
         sorted_counters = sorted(counters.items(), key=lambda x: x[1], reverse=True)
         logging.info(f"Sorted Counters: {sorted_counters}")
-    
-        return sorted_counters
-    
+
+        return func.HttpResponse(
+            body=json.dumps({"counters": sorted_counters}),
+            status_code=200,
+            headers={"Content-Type": "application/json"},
+        )
+
     except Exception as e:
         logging.error(f"Error: {e}")
         return func.HttpResponse("Error: Unable to read entities from Azure Table Storage", status_code=500)
+
 
     return func.HttpResponse(json.dumps({"counters": counters}), status_code=200, headers={"Content-Type": "application/json"})
