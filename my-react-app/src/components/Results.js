@@ -24,11 +24,17 @@ const Results = () => {
   }, []);
 
   const handleSearch = () => {
+    // If searchTag is empty or contains only spaces, set filteredResults to all results
+    if (!searchTag.trim()) {
+      setFilteredResults(results);
+      return;
+    }
+
     // Filter results based on the search tag
     const filtered = results.filter((result) => {
       if (!result.Tags) return false; // If Tags is not defined, exclude the result
       const tagsArray = result.Tags.split(";"); // Split the Tags string into an array
-      return tagsArray.includes(searchTag); // Check if the searched tag is included in the array
+      return tagsArray.includes(searchTag.trim()); // Check if the searched tag is included in the array
     });
     setFilteredResults(filtered);
   };

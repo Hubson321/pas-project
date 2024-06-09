@@ -203,12 +203,10 @@ def process(msg: func.QueueMessage) -> None:
     entity = None
     try:
         entity = table_client.get_entity(partition_key=idx, row_key=idx)
-        logging.error("[PROCESSING][" + idx +  "] GET ENTITY")
     except Exception as e:
         logging.error(f"Error while getting entity: {e}")
         raise e
 
-    logging.error("[PROCESSING][" + idx +  "] CHECK NULL")
     if entity is None:
         logging.error(f"Error entity is null: {e}")
         return
@@ -216,7 +214,6 @@ def process(msg: func.QueueMessage) -> None:
     # get sas token
     try:
         sas_token = generate_sas_token(idx + ".png")
-        logging.error("[PROCESSING][" + idx +  "] SAS TOKEN = " + sas_token)
     except Exception as e:
         logging.error(f"Error while generating SAS token: {e}")
         raise e
@@ -228,7 +225,6 @@ def process(msg: func.QueueMessage) -> None:
         for tag in analysis.tags:
             if tag.confidence > 0.8:
                 tags.append(tag.name)
-                logging.error("[PROCESSING][" + idx +  "] ADDING TAG = " + tag.name)
     except Exception as e:
         logging.error(f"Error while analzying picture tags: {e}")
         raise e
@@ -236,8 +232,6 @@ def process(msg: func.QueueMessage) -> None:
     entity["State"] = "processed"
     entity["Tags"] = ";".join(tags)
 
-    logging.error("[PROCESSING][" + idx +  "] TAGS = " + entity["Tags"])
-    logging.error("[PROCESSING][" + idx +  "] UPSERTING")
     try:
         table_client.upsert_entity(entity=entity)
     except Exception as e:
@@ -263,8 +257,10 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
     try:
         entities = table_client.list_entities()
         for entity in entities:
+            logging.error("[COUNTERS] Entity tags=" + entity.get("Tags"))
             entity = dict(entity)
             for tag in entity.get("Tags", []):
+                logging.error("[COUNTERS] Tag=" + tag)
                 if tag in counters:
                     counters[tag] += 1
                 else:
