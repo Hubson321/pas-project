@@ -43,10 +43,6 @@ const Results = () => {
   };
 
   // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
-
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
