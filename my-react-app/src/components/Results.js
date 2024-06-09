@@ -8,7 +8,7 @@ const Results = () => {
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Define itemsPerPage state
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,30 +16,27 @@ const Results = () => {
         const response = await axios.get(ENDPOINT + "/list");
         const sortedResults = response.data.list.sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp));
         setResults(sortedResults);
-        setFilteredResults(sortedResults); // Initially set filtered results to all results
+        setFilteredResults(sortedResults);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
-  // Define handleSearch function
+
   const handleSearch = () => {
-    // If searchTag is empty or contains only spaces, set filteredResults to all results
     if (!searchTag.trim()) {
       setFilteredResults(results);
       return;
     }
-    // Filter results based on the search tag
     const filtered = results.filter((result) => {
-      if (!result.Tags) return false; // If Tags is not defined, exclude the result
-      const tagsArray = result.Tags.split(";"); // Split the Tags string into an array
-      return tagsArray.includes(searchTag.trim()); // Check if the searched tag is included in the array
+      if (!result.Tags) return false;
+      const tagsArray = result.Tags.split(";");
+      return tagsArray.includes(searchTag.trim());
     });
     setFilteredResults(filtered);
   };
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
@@ -51,7 +48,6 @@ const Results = () => {
 
   return (
     <div className="results-container">
-      {/* Search bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -61,15 +57,31 @@ const Results = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-      {/* Result table */}
+
       <table className="result-table">
-        {/* Table header */}
-        {/* Table body */}
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>URL</th>
+            <th>State</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((item) => (
+            <tr key={item.RowKey}>
+              <td>{item.Timestamp}</td>
+              <td><a href={item.Url} target="_blank" rel="noopener noreferrer">{item.Url}</a></td>
+              <td>{item.State}</td>
+              <td>{item.Tags}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
-      {/* Pagination */}
+
       <ul className="pagination">
         {pageNumbers.map(number => (
-          <li key={number} onClick={() => setCurrentPage(number)}>
+          <li key={number} onClick={() => setCurrentPage(number)} style={{ cursor: 'pointer', display: 'inline-block', margin: '0 5px' }}>
             {number}
           </li>
         ))}
@@ -77,4 +89,5 @@ const Results = () => {
     </div>
   );
 };
+
 export default Results;
