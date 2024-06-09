@@ -8,7 +8,7 @@ const Results = () => {
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(10); // Removed setItemsPerPage
 
   useEffect(() => {
     const fetchData = async () => {

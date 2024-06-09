@@ -104,6 +104,7 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
             container=PHOTOS_CONTAINER_NAME, blob=image_name
         )
         blob_client.upload_blob(body, overwrite=True)
+        logging.error("[UPLOAD] BLOB = " + str(body))
     except Exception as e:
         logging.error(f"Error: {e}")
         return func.HttpResponse(
@@ -263,7 +264,6 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
             tags_list = tags_string.split(";") if tags_string else []  # Split the Tags string into a list of tags
 
             for tag in tags_list:
-                logging.error("[COUNTERS] Tag=" + tag)
                 if tag in counters:
                     counters[tag] += 1
                 else:
