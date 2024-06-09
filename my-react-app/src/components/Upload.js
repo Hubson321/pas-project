@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom"; // Import useHistory hook
 
 const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
-const Upload = () => {
+const Upload = ({ history }) => {
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const history = useHistory(); // Initialize useHistory hook
 
   const handleFileChange = (event) => {
     setSelectedFiles(event.target.files);
