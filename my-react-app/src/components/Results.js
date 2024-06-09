@@ -59,21 +59,25 @@ const Results = () => {
       </div>
 
       <table className="result-table">
-        <thead>
+      <thead>
           <tr>
-            <th>Timestamp</th>
+            <th>ID</th>
             <th>URL</th>
-            <th>State</th>
             <th>Tags</th>
+            <th>State</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.RowKey}>
-              <td>{item.Timestamp}</td>
-              <td><a href={item.Url} target="_blank" rel="noopener noreferrer">{item.Url}</a></td>
-              <td>{item.State}</td>
-              <td>{item.Tags}</td>
+          {currentItems.map((result) => (
+            <tr key={result.RowKey}>
+              <td>{result.RowKey}</td>
+              <td>
+                <a href={result.Url} target="_blank" rel="noopener noreferrer">
+                  View Image
+                </a>
+              </td>
+              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
+              <td>{result.State}</td>
             </tr>
           ))}
         </tbody>
