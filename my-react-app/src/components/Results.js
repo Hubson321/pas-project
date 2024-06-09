@@ -7,7 +7,6 @@ const Results = () => {
   const [results, setResults] = useState([]);
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Define currentPage state
   const [itemsPerPage] = useState(10); // Define itemsPerPage state
 
   useEffect(() => {
@@ -70,7 +69,7 @@ const Results = () => {
       {/* Pagination */}
       <ul className="pagination">
         {pageNumbers.map(number => (
-          <li key={number} onClick={() => setCurrentPage(number)}>
+          <li key={number}>
             {number}
           </li>
         ))}
