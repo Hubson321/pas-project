@@ -7,8 +7,8 @@ const Results = () => {
   const [results, setResults] = useState([]);
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1); // Define currentPage state
+  const [itemsPerPage] = useState(10); // Define itemsPerPage state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +25,7 @@ const Results = () => {
     fetchData();
   }, []);
 
+  // Define handleSearch function
   const handleSearch = () => {
     // If searchTag is empty or contains only spaces, set filteredResults to all results
     if (!searchTag.trim()) {
@@ -42,6 +43,10 @@ const Results = () => {
   };
 
   // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
