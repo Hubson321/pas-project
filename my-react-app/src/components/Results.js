@@ -68,13 +68,12 @@ const Results = () => {
 
       {/* Pagination */}
       <ul className="pagination">
-        {pageNumbers.map((number) => (
-          <li key={number} style={{ display: "inline-block", margin: "0 5px" }}>
+        {pageNumbers.map(number => (
+          <li key={number}>
             {number}
           </li>
         ))}
       </ul>
-
     </div>
   );
 };

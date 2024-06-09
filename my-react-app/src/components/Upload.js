@@ -7,9 +7,9 @@ const Upload = ({ history }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleFileChange = (event) => {
-    setSelectedFiles([...event.target.files]);
+    setSelectedFiles(event.target.files);
   };
-  
+
   const handleUpload = async (event) => {
     event.preventDefault(); 
     if (!selectedFiles || selectedFiles.length === 0) return;
