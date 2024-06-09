@@ -55,18 +55,18 @@ const Results = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredResults.map((result) => (
-            <tr key={result.RowKey}>
-              <td>{result.RowKey}</td>
-              <td>
-                <a href={result.Url} target="_blank" rel="noopener noreferrer">
-                  View Image
-                </a>
-              </td>
-              <td>{result.Tags?.join(", ")}</td>
-              <td>{result.State}</td>
-            </tr>
-          ))}
+        {filteredResults.map((result) => (
+          <tr key={result.RowKey}>
+            <td>{result.RowKey}</td>
+            <td>
+              <a href={result.Url} target="_blank" rel="noopener noreferrer">
+                View Image
+              </a>
+            </td>
+            <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
+            <td>{result.State}</td>
+          </tr>
+        ))}
         </tbody>
       </table>
     </div>
