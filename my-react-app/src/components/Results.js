@@ -8,7 +8,7 @@ const Results = () => {
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Removed setItemsPerPage
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,17 +41,15 @@ const Results = () => {
     setFilteredResults(filtered);
   };
 
-  // Calculate indexes for pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Pagination
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredResults.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="results-container">
-      <h2>Image Analysis Results</h2>
+      {/* Search bar */}
       <div className="search-bar">
         <input
           type="text"
@@ -61,39 +59,20 @@ const Results = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
+
+      {/* Result table */}
       <table className="result-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>URL</th>
-            <th>Tags</th>
-            <th>State</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((result) => (
-            <tr key={result.RowKey}>
-              <td>{result.RowKey}</td>
-              <td>
-                <a href={result.Url} target="_blank" rel="noopener noreferrer">
-                  View Image
-                </a>
-              </td>
-              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
-              <td>{result.State}</td>
-            </tr>
-          ))}
-        </tbody>
+        {/* Table header */}
+        {/* Table body */}
       </table>
+
       {/* Pagination */}
       <ul className="pagination">
-        {Array(Math.ceil(filteredResults.length / itemsPerPage))
-          .fill()
-          .map((_, index) => (
-            <li key={index} onClick={() => paginate(index + 1)}>
-              {index + 1}
-            </li>
-          ))}
+        {pageNumbers.map(number => (
+          <li key={number} onClick={() => setCurrentPage(number)}>
+            {number}
+          </li>
+        ))}
       </ul>
     </div>
   );
