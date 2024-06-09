@@ -25,9 +25,11 @@ const Results = () => {
 
   const handleSearch = () => {
     // Filter results based on the search tag
-    const filtered = results.filter(
-      (result) => result.Tags && result.Tags.includes(searchTag)
-    );
+    const filtered = results.filter((result) => {
+      if (!result.Tags) return false; // If Tags is not defined, exclude the result
+      const tagsArray = result.Tags.split(";"); // Split the Tags string into an array
+      return tagsArray.includes(searchTag); // Check if the searched tag is included in the array
+    });
     setFilteredResults(filtered);
   };
 

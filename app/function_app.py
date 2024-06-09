@@ -234,8 +234,9 @@ def process(msg: func.QueueMessage) -> None:
         raise e
 
     entity["State"] = "processed"
-    entity["Tags"] = tags
+    entity["Tags"] = ";".join(tags)
 
+    logging.error("[PROCESSING][" + idx +  "] TAGS = " + entity["Tags"])
     logging.error("[PROCESSING][" + idx +  "] UPSERTING")
     try:
         table_client.upsert_entity(entity=entity)
