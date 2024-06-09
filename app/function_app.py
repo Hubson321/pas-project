@@ -54,7 +54,6 @@ def generate_sas_token(image_name):
     )
     return f"{blob_client.url}?{token}"
 
-
 @app.function_name(name="post")
 @app.route(route="post", auth_level=func.AuthLevel.ANONYMOUS, methods=["POST"])
 def post(req: func.HttpRequest) -> func.HttpResponse:
@@ -117,7 +116,7 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
         "Timestamp": datetime.datetime.now().isoformat(),
         "Url": blob_client.url,
         "State": "uploaded",
-        "Result": False,
+        "Result": False
     }
     try:
         logging.info("upserting entity")
@@ -142,7 +141,6 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
         status_code=200,
         headers={"Content-Type": "application/json"},
     )
-
 
 @app.function_name(name="list")
 @app.route(route="list", auth_level=func.AuthLevel.ANONYMOUS, methods=["GET"])
@@ -187,7 +185,6 @@ def list(req: func.HttpRequest) -> func.HttpResponse:
 )
 def process(msg: func.QueueMessage) -> None:
     idx = msg.get_body().decode("utf-8")
-    logging.info("Python HTTP trigger function processed a request.")
 
     try:
         table_service_client = TableServiceClient.from_connection_string(
@@ -206,18 +203,22 @@ def process(msg: func.QueueMessage) -> None:
     entity = None
     try:
         entity = table_client.get_entity(partition_key=idx, row_key=idx)
+        logging.error("[PROCESSING][" + idx +  "] GET ENTITY")
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Error while getting entity: {e}")
         raise e
 
+    logging.error("[PROCESSING][" + idx +  "] CHECK NULL")
     if entity is None:
+        logging.error(f"Error entity is null: {e}")
         return
 
     # get sas token
     try:
         sas_token = generate_sas_token(idx + ".png")
+        logging.error("[PROCESSING][" + idx +  "] SAS TOKEN = " + sas_token)
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Error while generating SAS token: {e}")
         raise e
 
     # Label image with Azure Congitive Services
@@ -227,13 +228,15 @@ def process(msg: func.QueueMessage) -> None:
         for tag in analysis.tags:
             if tag.confidence > 0.8:
                 tags.append(tag.name)
+                logging.error("[PROCESSING][" + idx +  "] ADDING TAG = " + tag.name)
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Error while analzying picture tags: {e}")
         raise e
 
     entity["State"] = "processed"
-    entity["Result"] = "hotdog" in tags
+    entity["Tags"] = tags
 
+    logging.error("[PROCESSING][" + idx +  "] UPSERTING")
     try:
         table_client.upsert_entity(entity=entity)
     except Exception as e:
@@ -241,3 +244,33 @@ def process(msg: func.QueueMessage) -> None:
         raise e
 
     return None
+
+@app.function_name(name="get_counters")
+@app.route(route="get_counters", auth_level=func.AuthLevel.ANONYMOUS, methods=["GET"])
+def get_counters(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info("Getting counters from Azure Table Storage.")
+
+    try:
+        table_service_client = TableServiceClient.from_connection_string(PHOTOS_CONNSTRING)
+        table_client = table_service_client.get_table_client(PHOTOS_TABLE_NAME)
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        return func.HttpResponse("Error: Unable to connect to Azure Storage", status_code=500)
+
+    counters = {}
+
+    try:
+        entities = table_client.list_entities()
+        for entity in entities:
+            entity = dict(entity)
+            for tag in entity.get("Tags", []):
+                if tag in counters:
+                    counters[tag] += 1
+                else:
+                    counters[tag] = 1
+        logging.info(f"Counters: {counters}")
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        return func.HttpResponse("Error: Unable to read entities from Azure Table Storage", status_code=500)
+
+    return func.HttpResponse(json.dumps({"counters": counters}), status_code=200, headers={"Content-Type": "application/json"})
