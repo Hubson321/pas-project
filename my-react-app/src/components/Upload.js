@@ -1,42 +1,101 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
-const Upload = ({ history }) => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
+const Results = () => {
+  const [results, setResults] = useState([]);
+  const [searchTag, setSearchTag] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const handleFileChange = (event) => {
-    setSelectedFiles(event.target.files);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(ENDPOINT + "/list");
+        setResults(response.data.list);
+        setFilteredResults(response.data.list); // Initially set filtered results to all results
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const handleUpload = async (event) => {
-    event.preventDefault(); 
-    if (!selectedFiles || selectedFiles.length === 0) return;
-    const formData = new FormData();
-    for (let i = 0; i < selectedFiles.length; i++) {
-      formData.append("images", selectedFiles[i]);
+    fetchData();
+  }, []);
+
+  const handleSearch = () => {
+    // If searchTag is empty or contains only spaces, set filteredResults to all results
+    if (!searchTag.trim()) {
+      setFilteredResults(results);
+      return;
     }
 
-    try {
-      await axios.post(ENDPOINT + "/post", formData);
-      alert("Upload successful!");
-      history.push("/results"); // Navigate to the "Results" tab after successful upload
-    } catch (error) {
-      console.error("Error uploading files:", error);
-      alert("Upload failed!");
-    }
+    // Filter results based on the search tag
+    const filtered = results.filter((result) => {
+      if (!result.Tags) return false; // If Tags is not defined, exclude the result
+      const tagsArray = result.Tags.split(";"); // Split the Tags string into an array
+      return tagsArray.includes(searchTag.trim()); // Check if the searched tag is included in the array
+    });
+    setFilteredResults(filtered);
   };
+
+  // Calculate indexes for pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="upload-container">
-      <h2>Upload Images</h2>
-      <form onSubmit={handleUpload}>
-        <input type="file" multiple onChange={handleFileChange} />
-        <button type="submit">Upload</button>
-      </form>
+    <div className="results-container">
+      <h2>Image Analysis Results</h2>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search by tag..."
+          value={searchTag}
+          onChange={(e) => setSearchTag(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <table className="result-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>Tags</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((result) => (
+            <tr key={result.RowKey}>
+              <td>{result.RowKey}</td>
+              <td>
+                <a href={result.Url} target="_blank" rel="noopener noreferrer">
+                  View Image
+                </a>
+              </td>
+              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
+              <td>{result.State}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {/* Pagination */}
+      <ul className="pagination">
+        {Array(Math.ceil(filteredResults.length / itemsPerPage))
+          .fill()
+          .map((_, index) => (
+            <li key={index} onClick={() => paginate(index + 1)}>
+              {index + 1}
+            </li>
+          ))}
+      </ul>
     </div>
   );
 };
 
-export default Upload;
+export default Results;
