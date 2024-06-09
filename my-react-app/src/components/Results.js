@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
 const ENDPOINT = "https://hubmhot2hub04app.azurewebsites.net/api";
 
 const Results = () => {
   const [results, setResults] = useState([]);
   const [searchTag, setSearchTag] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Removed setItemsPerPage
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +40,14 @@ const Results = () => {
     setFilteredResults(filtered);
   };
 
+  // Calculate indexes for pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="results-container">
       <h2>Image Analysis Results</h2>
@@ -61,20 +70,30 @@ const Results = () => {
           </tr>
         </thead>
         <tbody>
-        {filteredResults.map((result) => (
-          <tr key={result.RowKey}>
-            <td>{result.RowKey}</td>
-            <td>
-              <a href={result.Url} target="_blank" rel="noopener noreferrer">
-                View Image
-              </a>
-            </td>
-            <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
-            <td>{result.State}</td>
-          </tr>
-        ))}
+          {currentItems.map((result) => (
+            <tr key={result.RowKey}>
+              <td>{result.RowKey}</td>
+              <td>
+                <a href={result.Url} target="_blank" rel="noopener noreferrer">
+                  View Image
+                </a>
+              </td>
+              <td>{result.Tags && result.Tags.split(";").join(", ")}</td>
+              <td>{result.State}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      {/* Pagination */}
+      <ul className="pagination">
+        {Array(Math.ceil(filteredResults.length / itemsPerPage))
+          .fill()
+          .map((_, index) => (
+            <li key={index} onClick={() => paginate(index + 1)}>
+              {index + 1}
+            </li>
+          ))}
+      </ul>
     </div>
   );
 };
