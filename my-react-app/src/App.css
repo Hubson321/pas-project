@@ -153,3 +153,13 @@
 .result-table a:hover {
   text-decoration: underline;
 }
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination .page-number {
+  margin-right: 5px;
+}
