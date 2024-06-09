@@ -14,8 +14,9 @@ const Results = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(ENDPOINT + "/list");
-        setResults(response.data.list);
-        setFilteredResults(response.data.list); // Initially set filtered results to all results
+        const sortedResults = response.data.list.sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp));
+        setResults(sortedResults);
+        setFilteredResults(sortedResults); // Initially set filtered results to all results
       } catch (error) {
         console.error("Error fetching data:", error);
       }
