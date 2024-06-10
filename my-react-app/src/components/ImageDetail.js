@@ -21,7 +21,7 @@ const ImageDetail = ({ match }) => {
   return (
     <div className="image-detail">
       <h2>Image Detail</h2>
-      {imageUrl && <img src={imageUrl} alt="Image" />}
+      {imageUrl && <img src={imageUrl} alt="" />}
     </div>
   );
 };
