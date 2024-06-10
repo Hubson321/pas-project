@@ -24,13 +24,13 @@ const App = () => {
         <nav className="navbar">
           <ul className="nav-links">
             <li>
-              <Link to="/upload" onClick={handleLinkClick}>Upload</Link>
+              <Link to="/upload">Upload</Link>
             </li>
             <li>
-              <Link to="/results" onClick={handleLinkClick}>Results</Link>
+              <Link to="/results">Results</Link>
             </li>
             <li>
-              <Link to="/get-counter" onClick={handleLinkClick}>Get Counter</Link>
+              <Link to="/get-counter">Get Counter</Link>
             </li>
           </ul>
         </nav>
