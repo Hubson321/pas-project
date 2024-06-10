@@ -37,6 +37,30 @@ const Results = () => {
     setFilteredResults(filtered);
   };
 
+  const sortResultsByStatus = (order) => {
+    const sortedResults = [...filteredResults].sort((a, b) => {
+      if (order === "asc") {
+        return a.State.localeCompare(b.State);
+      } else {
+        return b.State.localeCompare(a.State);
+      }
+    });
+    setFilteredResults(sortedResults);
+  };
+
+  const sortResultsByTagCount = (order) => {
+    const sortedResults = [...filteredResults].sort((a, b) => {
+      const aTags = a.Tags ? a.Tags.split(";").length : 0;
+      const bTags = b.Tags ? b.Tags.split(";").length : 0;
+      if (order === "asc") {
+        return aTags - bTags;
+      } else {
+        return bTags - aTags;
+      }
+    });
+    setFilteredResults(sortedResults);
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredResults.slice(indexOfFirstItem, indexOfLastItem);
@@ -59,12 +83,12 @@ const Results = () => {
       </div>
 
       <table className="result-table">
-      <thead>
+        <thead>
           <tr>
             <th>ID</th>
             <th>URL</th>
-            <th>Tags</th>
-            <th>State</th>
+            <th onClick={() => sortResultsByTagCount("asc")} style={{ cursor: 'pointer' }}>Tags (Click to Sort)</th>
+            <th onClick={() => sortResultsByStatus("asc")} style={{ cursor: 'pointer' }}>State (Click to Sort)</th>
           </tr>
         </thead>
         <tbody>

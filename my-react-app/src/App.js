@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"; 
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from "react-router-dom"; 
 
 import Upload from "./components/Upload";
 import Results from "./components/Results";
@@ -9,25 +9,34 @@ import ImageDetail from "./components/ImageDetail";
 import "./App.css";
 
 const App = () => {
+  const [refreshResults, setRefreshResults] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLinkClick = () => {
+    setRefreshResults(true);
+    // Navigate to the route without refreshing the page
+    navigate(window.location.pathname);
+  };
+
   return (
     <Router>
       <div>
         <nav className="navbar">
           <ul className="nav-links">
             <li>
-              <Link to="/upload">Upload</Link>
+              <Link to="/upload" onClick={handleLinkClick}>Upload</Link>
             </li>
             <li>
-              <Link to="/results">Results</Link>
+              <Link to="/results" onClick={handleLinkClick}>Results</Link>
             </li>
             <li>
-              <Link to="/get-counter">Get Counter</Link>
+              <Link to="/get-counter" onClick={handleLinkClick}>Get Counter</Link>
             </li>
           </ul>
         </nav>
         <Routes>
           <Route path="/upload" element={<Upload />} />
-          <Route path="/results" element={<Results />} />
+          <Route path="/results" element={<Results refresh={refreshResults} setRefresh={setRefreshResults} />} />
           <Route path="/get-counter" element={<GetCounter />} />
           <Route path="/image/:imageId" element={<ImageDetail />} /> {/* Add route for ImageDetail */}
           <Route path="/" element={<h2>Welcome to Azure Image Analyzer</h2>} />

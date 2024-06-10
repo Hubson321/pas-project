@@ -17,7 +17,7 @@ const Upload = ({ history }) => {
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("images", selectedFiles[i]);
     }
-
+  
     try {
       await axios.post(ENDPOINT + "/post", formData, {
         headers: {
