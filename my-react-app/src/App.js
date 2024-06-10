@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Upload from "./components/Upload";
 import Results from "./components/Results";
 import GetCounter from "./components/GetCounter";
+import ImageDetail from "./components/ImageDetail";
 
 import "./App.css";
 
