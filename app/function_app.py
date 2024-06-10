@@ -98,6 +98,7 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
 
     idx = str(uuid.uuid4())
     image_name = idx + ".png"
+    logging.warn("[UPLOAD][" + image_name + "] BLOB = " + str(body))
 
     try:
         blob_client = blob_service_client.get_blob_client(
@@ -165,7 +166,6 @@ def list(req: func.HttpRequest) -> func.HttpResponse:
     try:
         for entity in table_client.list_entities():
             entities.append(entity)
-        logging.warn(f"Entities: {entities}")
     except Exception as e:
         logging.error(f"Error: {e}")
         return func.HttpResponse(
