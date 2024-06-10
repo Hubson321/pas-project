@@ -26,20 +26,20 @@ jobs:
           cd my-react-app
           npm install
           npm run build
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      # - name: Install Azure CLI
+      #   run: |
+      #     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      - name: Azure Login
-        run: az login --service-principal -u ${{ secrets.AZURE_SP_APP_ID }} -p ${{ secrets.AZURE_SP_PASSWORD }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+      # - name: Azure Login
+      #   run: az login --service-principal -u ${{ secrets.AZURE_SP_APP_ID }} -p ${{ secrets.AZURE_SP_PASSWORD }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-      - name: Publish Azure Function App
-        env:
-          AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-        run: |
-          cd app
-          echo $AZURE_FUNCTIONAPP_PUBLISH_PROFILE > publishProfile.publishSettings
-          func azure functionapp publish hubmhot2hub04app --publish-settings-file publishProfile.publishSettings
+      # - name: Publish Azure Function App
+      #   env:
+      #     AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+      #   run: |
+      #     cd app
+      #     echo $AZURE_FUNCTIONAPP_PUBLISH_PROFILE > publishProfile.publishSettings
+      #     func azure functionapp publish hubmhot2hub04app --publish-settings-file publishProfile.publishSettings
 
       - name: Build And Deploy
         id: builddeploy
