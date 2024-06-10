@@ -19,7 +19,11 @@ const Upload = ({ history }) => {
     }
 
     try {
-      await axios.post(ENDPOINT + "/post", formData);
+      await axios.post(ENDPOINT + "/post", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("Upload successful!");
       history.push("/results");
     } catch (error) {

@@ -28,6 +28,7 @@ const App = () => {
           <Route path="/upload" element={<Upload />} />
           <Route path="/results" element={<Results />} />
           <Route path="/get-counter" element={<GetCounter />} />
+          <Route path="/image/:imageId" element={<ImageDetail />} /> {/* Add route for ImageDetail */}
           <Route path="/" element={<h2>Welcome to Azure Image Analyzer</h2>} />
         </Routes>
       </div>

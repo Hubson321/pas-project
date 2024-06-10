@@ -281,5 +281,21 @@ def get_counters(req: func.HttpRequest) -> func.HttpResponse:
         logging.error(f"Error: {e}")
         return func.HttpResponse("Error: Unable to read entities from Azure Table Storage", status_code=500)
 
+@app.route(route="images/{image_name}", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def get_image(req: func.HttpRequest, image_name: str) -> func.HttpResponse:
+    """Retrieve and return image data from Azure Blob Storage"""
+    try:
+        blob_service_client = BlobServiceClient.from_connection_string(PHOTOS_CONNSTRING)
+        blob_client = blob_service_client.get_blob_client(container=PHOTOS_CONTAINER_NAME, blob=image_name)
+        blob_data = blob_client.download_blob()
 
+        return func.HttpResponse(
+            blob_data.readall(),
+            status_code=200,
+            mimetype="image/png"
+        )
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        return func.HttpResponse("Error: Image not found", status_code=404)
+    
     return func.HttpResponse(json.dumps({"counters": counters}), status_code=200, headers={"Content-Type": "application/json"})
