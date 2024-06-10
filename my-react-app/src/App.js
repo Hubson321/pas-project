@@ -12,12 +12,6 @@ const App = () => {
   const [refreshResults, setRefreshResults] = useState(false);
   const navigate = useNavigate();
 
-  const handleLinkClick = () => {
-    setRefreshResults(true);
-    // Navigate to the route without refreshing the page
-    navigate(window.location.pathname);
-  };
-
   return (
     <Router>
       <div>
