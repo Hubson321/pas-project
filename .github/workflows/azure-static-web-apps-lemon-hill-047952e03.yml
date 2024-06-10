@@ -26,6 +26,9 @@ jobs:
           cd my-react-app
           npm install
           npm run build
+      - name: Install Azure Functions Core Tools
+        run: |
+          npm install -g azure-functions-core-tools    
       - name: Publish Azure Function App
         env:
           AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
