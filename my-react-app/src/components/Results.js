@@ -90,12 +90,8 @@ const Results = () => {
           <tr>
             <th>ID</th>
             <th>URL</th>
-            <th onClick={() => { sortResultsByTagCount(sortOrder === "asc" ? "desc" : "asc"); setSortField('tags'); setSortOrder(sortOrder === "asc" ? "desc" : "asc"); }} style={{ cursor: 'pointer' }}>
-              Tags {sortField === 'tags' && (sortOrder === 'asc' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => { sortResultsByStatus(sortOrder === "asc" ? "desc" : "asc"); setSortField('state'); setSortOrder(sortOrder === "asc" ? "desc" : "asc"); }} style={{ cursor: 'pointer' }}>
-              State {sortField === 'state' && (sortOrder === 'asc' ? '↑' : '↓')}
-            </th>
+            <th onClick={() => sortResultsByTagCount("asc")} style={{ cursor: 'pointer' }}></th>
+            <th onClick={() => sortResultsByStatus("asc")} style={{ cursor: 'pointer' }}></th>
           </tr>
         </thead>
         <tbody>
