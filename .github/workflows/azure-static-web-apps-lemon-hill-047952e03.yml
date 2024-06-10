@@ -27,9 +27,13 @@ jobs:
           npm install
           npm run build
       - name: Publish Azure Function App
+        env:
+          AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
         run: |
           cd app
-          func azure functionapp publish hubmhot2hub04app --python
+          echo $AZURE_FUNCTIONAPP_PUBLISH_PROFILE > publishProfile.publishSettings
+          func azure functionapp publish hubmhot2hub04app --publish-settings-file publishProfile.publishSettings
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
