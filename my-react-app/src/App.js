@@ -12,19 +12,25 @@ const App = () => {
   const [refreshResults, setRefreshResults] = useState(false);
   const navigate = useNavigate();
 
+  const handleLinkClick = () => {
+    setRefreshResults(true);
+    // Navigate to the route without refreshing the page
+    navigate(window.location.pathname);
+  };
+
   return (
     <Router>
       <div>
         <nav className="navbar">
           <ul className="nav-links">
             <li>
-              <Link to="/upload">Upload</Link>
+              <Link to="/upload" onClick={handleLinkClick}>Upload</Link>
             </li>
             <li>
-              <Link to="/results">Results</Link>
+              <Link to="/results" onClick={handleLinkClick}>Results</Link>
             </li>
             <li>
-              <Link to="/get-counter">Get Counter</Link>
+              <Link to="/get-counter" onClick={handleLinkClick}>Get Counter</Link>
             </li>
           </ul>
         </nav>
