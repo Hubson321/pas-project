@@ -10,6 +10,9 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
+  const [sortField, setSortField] = useState(null);
+  const [sortOrder, setSortOrder] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,8 +90,12 @@ const Results = () => {
           <tr>
             <th>ID</th>
             <th>URL</th>
-            <th onClick={() => sortResultsByTagCount("asc")} style={{ cursor: 'pointer' }}>Tags (Click to Sort)</th>
-            <th onClick={() => sortResultsByStatus("asc")} style={{ cursor: 'pointer' }}>State (Click to Sort)</th>
+            <th onClick={() => sortResultsByTagCount("asc")} style={{ cursor: 'pointer' }}>
+              Tags {sortField === 'tags' && (sortOrder === 'asc' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => sortResultsByStatus("asc")} style={{ cursor: 'pointer' }}>
+              State {sortField === 'state' && (sortOrder === 'asc' ? '↑' : '↓')}
+            </th>
           </tr>
         </thead>
         <tbody>
