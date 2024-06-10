@@ -57,7 +57,6 @@ def generate_sas_token(image_name):
 @app.function_name(name="post")
 @app.route(route="post", auth_level=func.AuthLevel.ANONYMOUS, methods=["POST"])
 def post(req: func.HttpRequest) -> func.HttpResponse:
-    """Post image from body to Azure Blob Storage and create an entry in Azure Table Storage"""
     try:
         table_service_client = TableServiceClient.from_connection_string(
             PHOTOS_CONNSTRING
@@ -83,17 +82,18 @@ def post(req: func.HttpRequest) -> func.HttpResponse:
     logging.info(
         "Uploading a photo to Azure Blob Storage and creating an entry in Azure Table Storage"
     )
-    if not req.get_body():
+    
+    # Check if the content type is multipart form data
+    if req.headers.get("Content-Type", "").startswith("multipart/form-data"):
+        # Get the file from the form data
+        body = req.files["images"].read()
+    else:
+        # Assume it's raw binary data
+        body = req.get_body()
+
+    if not body:
         return func.HttpResponse(
             "Please pass an image in the request body", status_code=400
-        )
-
-    try:
-        body = req.get_body()
-    except Exception as e:
-        logging.error(f"Error: {e}")
-        return func.HttpResponse(
-            "Error: Unable to read the image from the request body", status_code=400
         )
 
     idx = str(uuid.uuid4())
