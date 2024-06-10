@@ -10,9 +10,6 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  const [sortField, setSortField] = useState(null);
-  const [sortOrder, setSortOrder] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,30 +35,6 @@ const Results = () => {
       return tagsArray.includes(searchTag.trim());
     });
     setFilteredResults(filtered);
-  };
-
-  const sortResultsByStatus = (order) => {
-    const sortedResults = [...filteredResults].sort((a, b) => {
-      if (order === "asc") {
-        return a.State.localeCompare(b.State);
-      } else {
-        return b.State.localeCompare(a.State);
-      }
-    });
-    setFilteredResults(sortedResults);
-  };
-
-  const sortResultsByTagCount = (order) => {
-    const sortedResults = [...filteredResults].sort((a, b) => {
-      const aTags = a.Tags ? a.Tags.split(";").length : 0;
-      const bTags = b.Tags ? b.Tags.split(";").length : 0;
-      if (order === "asc") {
-        return aTags - bTags;
-      } else {
-        return bTags - aTags;
-      }
-    });
-    setFilteredResults(sortedResults);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -90,8 +63,8 @@ const Results = () => {
           <tr>
             <th>ID</th>
             <th>URL</th>
-            <th onClick={() => sortResultsByTagCount("asc")} style={{ cursor: 'pointer' }}></th>
-            <th onClick={() => sortResultsByStatus("asc")} style={{ cursor: 'pointer' }}></th>
+            <th>Tags</th>
+            <th>State</th>
           </tr>
         </thead>
         <tbody>
